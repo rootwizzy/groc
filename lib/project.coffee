@@ -16,7 +16,7 @@ styles               = require './styles'
 #
 # A project:
 module.exports = class Project
-  constructor: (root, outPath, minLogLevel=Logger::INFO) ->
+  constructor: (root, outPath, title, minLogLevel=Logger::INFO) ->
     @options = {}
     @log     = new Logger minLogLevel
 
@@ -24,7 +24,8 @@ module.exports = class Project
     @root = path.resolve root
     # * Generally wants documented generated somewhere within its tree.  We default the output path
     #   to be relative to the project root, unless you pass an absolute path.
-    @outPath = path.resolve @root, outPath
+    @outPath      = path.resolve @root, outPath
+    @projectTitle = title
     # * Contains a set of files to generate documentation from, source code or otherwise.
     @files = []
     # * Should strip specific prefixes of a file's path when generating relative paths for
@@ -75,6 +76,8 @@ module.exports = class Project
         targetPath:  if currentFile == indexPath then 'index' else fileMap[currentFile]
         pageTitle:   if currentFile == indexPath then (options.indexPageTitle || 'index') else fileMap[currentFile]
 
+
+
       targetFullPath = path.resolve @outPath, "#{fileInfo.targetPath}.html"
       
       # Only render files whose sources are newer than output?
@@ -108,6 +111,5 @@ module.exports = class Project
       style.renderCompleted (error) =>
         return callback error if error
 
-        @log.info ''
         @log.pass 'Documentation generated'
         callback()

@@ -1,7 +1,7 @@
 path = require 'path'
 
-_ = require 'underscore'
-
+_      = require 'underscore'
+Logger = require './logger'
 
 # # Style Helpers
 #
@@ -32,7 +32,7 @@ module.exports = StyleHelpers =
   # We take a list of file info objects, and a map of outlines to fileInfo.targetPath.
   #
   # We want a pretty complex hierarchy in our table of contents:
-  buildTableOfContents: (files, outlines) ->
+  buildTableOfContents: (files, outlines, project) ->
     files = files.sort (a, b) ->
       # * The index is always first in the table of contents.
       return -1 if a.targetPath == 'index'
@@ -86,7 +86,15 @@ module.exports = StyleHelpers =
         depth:   file.targetPath.split( path.join('/') ).length
         outline: outlines[file.targetPath]
 
-    @buildNodeTree nodes
+    projectWrapper = [
+      {
+        title: project.projectTitle
+        nodes: @buildNodeTree nodes 
+      }
+    ]
+
+
+    # @buildNodeTree nodes
 
   # Take a flat, though ordered, list of nodes and convert them into a tree.
   #
@@ -95,7 +103,6 @@ module.exports = StyleHelpers =
   buildNodeTree: (nodes) ->
     result = []
     stack  = []
-
     for node in nodes
       # Unwind the stack until we get to the first node that is at a lower depth than us.  We are
       # considered to be its child

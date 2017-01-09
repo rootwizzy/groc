@@ -1,5 +1,4 @@
 tableOfContents = <%= JSON.stringify(tableOfContents) %>
-
 # # Page Behavior
 
 # ## Table of Contents
@@ -201,8 +200,13 @@ buildNav = (metaInfo) ->
       </li>
     """
 
-  for node in tableOfContents
-    toc$.append buildTOCNode node, metaInfo
+  map = new Map()
+  for project in tableOfContents
+    map.set(project.title, project.nodes)
+
+  if map.get(window.TotemLodestar._modules.api.get_cur_repo())
+    for node in map.get(window.TotemLodestar._modules.api.get_cur_repo())
+      toc$.append buildTOCNode node, metaInfo
 
   nav$
 
@@ -213,10 +217,17 @@ buildTOCNode = (node, metaInfo) ->
   #} reference the first time after initializing it a few more lines below
   discloser = null
 
+  path = '/api/' + window.TotemLodestar._modules.api.get_cur_repo() + "/"
+  if metaInfo.relativeRoot 
+    path += /(\.\.\/){1,}([a-z-\/_]*.html)/g.exec(metaInfo.relativeRoot + node.data.targetPath + ".html")[2]
+  else 
+    path += node.data.targetPath + ".html"
+
   switch node.type
     when 'file'
       #} Single line to avoid extra whitespace
-      node$.append """<a class="label" href="#{metaInfo.relativeRoot}#{node.data.targetPath}.html" title="#{node.data.projectPath}"><span class="text">#{node.data.title}</span></a>"""
+      node$.append """<a class="label" href="#{path}" title="#{node.data.projectPath}"><span class="text">#{node.data.title}</span></a>"""
+
       clickLabel = (evt) ->
         if evt.target is discloser
           node$.toggleClass 'expanded'

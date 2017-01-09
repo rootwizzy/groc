@@ -94,7 +94,6 @@ module.exports = Utils =
       # this path map is going to substitute in their own.  Plus, if they care
       # about the extension, they can get it from the keys of the map.
       result[absPath] = if not path.extname(file) then file else file[0...-path.extname(file).length]
-
     result
 
   # Attempt to guess strip prefixes for a given set of arguments.
@@ -549,8 +548,6 @@ module.exports = Utils =
       highlighted = "\n#{result}\n".split ///.*<span.*#{seg}\s#{div}.*<\/span>.*///
 
       if highlighted.length != segments.length
-        console.log(result)
-
         error = new Error CompatibilityHelpers.format 'pygmentize rendered %d of %d segments; expected to be equal',
           highlighted.length, segments.length
 

@@ -118,6 +118,11 @@ module.exports = CLI = (inputArgs, callback) ->
       describe: "A path prefix to strip when generating documentation paths (or --no-strip)."
       alias:    't'
 
+    project:
+      describe: "Adds a project level title and section"
+      alias:    'p'
+      type:     'string'
+
     'empty-lines':
       describe: "Allow empty comment lines."
       default:  true
@@ -145,6 +150,7 @@ module.exports = CLI = (inputArgs, callback) ->
 
    'very-verbose':
       describe: "Hey, you asked for it."
+
 
 
   # ## Argument processing
@@ -190,7 +196,8 @@ module.exports = CLI = (inputArgs, callback) ->
 
   # A [Project](project.html) is just a handy way to configure the generation process, and is in
   # charge of kicking that off.
-  project = new Project argv.root, argv.out
+  project = new Project argv.root, argv.out, argv.project
+  Logger.warn 'Project ', project
 
   # `--silent`, `--verbose` and `--very-verbose` just impact the logging level of the project.
   project.log.minLevel = Logger::LEVELS.ERROR if argv.silent
@@ -226,6 +233,7 @@ module.exports = CLI = (inputArgs, callback) ->
     try
       style = require(argv.style) require './styles/base'
     catch error
+
 
   options =
     indexPageTitle: argv['index-page-title']
