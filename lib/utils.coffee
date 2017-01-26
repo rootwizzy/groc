@@ -12,6 +12,7 @@ hljs     = require 'highlight.js'
 marked   = require 'marked'
 
 marked.setOptions
+  gfm: true,
   highlight: (code, lang) ->
     if lang
       try

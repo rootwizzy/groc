@@ -20,6 +20,7 @@ html(lang="en")
       - else
         .file-path= projectPath
     #document
+      a(href='/' class='lodestar-link') Back to Guides
       - for (var i in segments)
         .segment
           - if (segments[i].markdownedComments != '')
