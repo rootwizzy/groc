@@ -79,6 +79,11 @@ module.exports = CLI = (inputArgs, callback) ->
       describe: "Supply your GitHub repository URL (if groc fails to guess it)."
       type:     'string'
 
+    branch:
+      describe: "Include an optional branch for linking in the documentation"
+      alias:    'b'
+      type:     'string'
+
     'only-render-newer':
       describe: "Only render files if the source is newer than the output."
       default:  true
@@ -197,7 +202,9 @@ module.exports = CLI = (inputArgs, callback) ->
   # A [Project](project.html) is just a handy way to configure the generation process, and is in
   # charge of kicking that off.
   project = new Project argv.root, argv.out, argv.project
+  project.githubBranch = argv['branch'] || 'master'
   Logger.warn 'Project ', project
+
 
   # `--silent`, `--verbose` and `--very-verbose` just impact the logging level of the project.
   project.log.minLevel = Logger::LEVELS.ERROR if argv.silent
