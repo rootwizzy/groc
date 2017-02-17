@@ -219,7 +219,7 @@ buildTOCNode = (node, metaInfo) ->
 
   path = '/api/' + window.TotemLodestar._modules.api.get_cur_repo() + "/"
   if metaInfo.relativeRoot 
-    path += /(\.\.\/){1,}([a-z0-9-\/_]*.html)/g.exec(metaInfo.relativeRoot + node.data.targetPath + ".html")[2]
+    path += /(\.\.\/){1,}([a-z0-9-\/_.]*.html)/g.exec(metaInfo.relativeRoot + node.data.targetPath + ".html")[2]
   else 
     path += node.data.targetPath + ".html"
 
