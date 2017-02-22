@@ -74,8 +74,26 @@ module.exports = (Base) -> class Default extends Base
         @log.error 'Failed to compile %s: %s', scriptPath, error.message
         return callback error
 
-      #@compressScript scriptSource, callback
+      # Removed? @compressScript scriptSource, callback
+
+      # Add ToC data after coffescript compilation due to stack allocation limiting
+      scriptSource = @insertTableOfContents scriptSource
       @concatenateScripts scriptSource, callback
+
+  insertTableOfContents: (scriptSource) ->
+    @log.trace 'Inserting table of Contents'
+    split_source =  scriptSource.split("\n")
+
+    toc_string = "  tableOfContents = " + JSON.stringify(@tableOfContents, null, '    ') + ";\n"
+
+    split_toc = toc_string.split("\n")
+    split_toc.splice(split_toc.length - 2, 1, "  ];")
+    toc_string = split_toc.join("\n")
+
+
+    split_source.splice(3, 0, toc_string)
+
+    split_source.join("\n")
 
   compressScript: (scriptSource, callback) ->
     @log.trace 'styles.Default#compressScript(..., ...)'
@@ -103,7 +121,7 @@ module.exports = (Base) -> class Default extends Base
         return callback error
 
       outputPath = path.join @targetAssets, 'behavior.js'
-      fs.writeFile outputPath, data + scriptSource, (error) =>
+      fs.writeFile outputPath, scriptSource, (error) =>
         if error
           @log.error 'Failed to write %s: %s', outputPath, error.message
           return callback error

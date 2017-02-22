@@ -117,7 +117,6 @@ module.exports = class Base
 
   renderCompleted: (callback) ->
     @log.trace 'BaseStyle#renderCompleted(...)'
-
     @tableOfContents = StyleHelpers.buildTableOfContents @files, @outline, @project
 
     callback()
