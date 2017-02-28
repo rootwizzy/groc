@@ -273,7 +273,7 @@ module.exports = LANGUAGES =
     foldPrefix:        '^'
 
   Ruby:
-    nameMatchers:      ['.rb', '.ru', '.gemspec']
+    nameMatchers:      ['.rb', '.ru', '.gemspec', '.rake']
     pygmentsLexer:     'ruby'
     singleLineComment: ['#']
     ignorePrefix:      '}'
